@@ -6,32 +6,10 @@ const productschema = require('./db/productschema')
 const cors = require('cors');;
 app.use(cors());
 app.use(express.json());
-const jwt = require('jsonwebtoken');
-const jwtkey ='yash-verma'
 
 
-const verifytoken = (req,resp,next)=>{
-  let token = req.headers['authorization'];
-  if(token){
-    token= token.split(' ')[1];
-   token =  token.replace(/"/g, ''); 
-    jwt.verify(token,jwtkey,(error,valid)=>{
-      if(valid){
-    
-       next();
-      }
-      else{
-        resp.send({status:false,message:'enter valid token' });
-      
-      }
-    });
-  }
-  else{
-    resp.send({status:false,message:'enter token '});
-  }
 
- 
- }
+
 
 app.post("/signup", async (req, resp) => {
     if (req.body.name == "" || req.body.email == "" || req.body.password == "") {
@@ -41,18 +19,12 @@ app.post("/signup", async (req, resp) => {
       let result = await data.save();
       result = result.toObject();
       delete result.password;
-      jwt.sign({result},jwtkey,{expiresIn:"2d"},(err,token)=>{
-        if(err){
-          resp.send({ status: false, message: "somthing went wrong" })
-        }
-        else{
-          resp.send({ status: true, message: "signup complete", data: result,auth:token });
-          
+      resp.send({ status: true, message: "signup complete", data: result });
+     
         }
      })
      
-    }
-  });
+  
   // app.post("/login", async (req, resp) => {
   //   if (req.body.password && req.body.email) {
   //     let user = await users.findOne(req.body).select("-password");
@@ -69,24 +41,20 @@ app.post("/signup", async (req, resp) => {
     if (req.body.password && req.body.email) {
       let user = await users.findOne(req.body).select("-password");
       if (user) {
-         jwt.sign({user},jwtkey,{expiresIn:"2d"},(err,token)=>{
-            if(err){
-              resp.send({ status: false, message: "somthing went wrong" });
-            }
-            else{
-              resp.send({ status: true, message: "login parfectly", data: user,auth:token });
-            }
-         })
-        
-      } else {
+        resp.send({ status: true, message: "login parfectly", data: user});
+      }
+      else {
         resp.send({ status: false, message: "user not found" });
       }
-    } else {
-      resp.send({ status: false, message: "enter all details" });
-    }
-  });
+         }
+         else {
+          resp.send({ status: false, message: "enter all details" });
+        }
+        
+      } 
+    )
   
-  app.post("/addproduct",verifytoken, async (req, resp) => {
+  app.post("/addproduct", async (req, resp) => {
     if (
       req.body.name == "" ||
       req.body.price == "" ||
@@ -102,7 +70,7 @@ app.post("/signup", async (req, resp) => {
     }
   });
   
-   app.get('/products',verifytoken,async(req,resp)=>{
+   app.get('/products',async(req,resp)=>{
      const item = await productschema.find();
        if(item.length==0){
           resp.send({status:false,message:'not found aney product'})
@@ -112,7 +80,7 @@ app.post("/signup", async (req, resp) => {
        }
    });
   
-   app.delete('/product/:id',verifytoken,async(req,resp)=>{
+   app.delete('/product/:id',async(req,resp)=>{
         let result = await productschema.deleteOne({_id:req.params.id});
         if(result){
           resp.send({status:true,message:'product deleted',data:result});
@@ -136,7 +104,7 @@ app.post("/signup", async (req, resp) => {
    });
   
   
-   app.put('/update/:id',verifytoken,async(req,resp)=>{
+   app.put('/update/:id',async(req,resp)=>{
     let result = await productschema.updateOne({_id:req.params.id},{$set:req.body});
     if(result){
       resp.send({status:true,message:'product updated',data:result});

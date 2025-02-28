@@ -42,7 +42,7 @@ const Signup = () => {
             if(response.data.status===true){
                 console.log(response.data);
                 localStorage.setItem('user',JSON.stringify(response.data.data))
-                localStorage.setItem('token',JSON.stringify(response.data.auth))
+              
                 alert(response.data.message);
                 navigate('/product');
             }

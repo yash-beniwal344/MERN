@@ -34,7 +34,7 @@ import { useNavigate } from 'react-router-dom';
             if(response.data.status===true){
                 alert(response.data.message);
                 localStorage.setItem('user',JSON.stringify(response.data.data))
-                localStorage.setItem('token',JSON.stringify(response.data.auth))
+              
                 console.log(response.data);
                 navigate('/product')
             }

@@ -35,10 +35,7 @@ const Addproduct = () => {
                 category: category,
                 userId: userId,
                 company: company 
-            },
-            headers:{
-            authorization:`bearer ${localStorage.getItem('token')}`
-        }
+            }
         }
     ).then((response) => {
             if (response.data.status === false) {

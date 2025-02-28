@@ -51,9 +51,6 @@ const Updateproduct = () => {
           price: price,
           category: category,
           company: company
-        },
-        headers: {
-          authorization: `bearer ${localStorage.getItem('token')}`
         }
       
        

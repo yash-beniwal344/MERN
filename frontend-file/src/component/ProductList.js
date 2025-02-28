@@ -12,13 +12,11 @@ const ProductList = () => {
 
   const getproduct = () => {
     axios({
-      method:'get',
-      url:'http://localhost:2345/products',
-      headers:{
-        authorization:`bearer ${localStorage.getItem('token')}`
-      }
+      method: 'get',
+      url: 'http://localhost:2345/products',
+
     })
-     
+
       .then((item) => {
         if (item.data.status === true) {
           setproduct(item.data.data);
@@ -34,11 +32,9 @@ const ProductList = () => {
     const userconfirm = window.confirm('can you trying to delete product');
     if (userconfirm) {
       axios
-        .delete(`http://localhost:2345/product/${id}`, {
-          headers: {
-            authorization: `bearer ${localStorage.getItem('token')}`
-          }
-        })
+        .delete(`http://localhost:2345/product/${id}`
+
+        )
         .then((response) => {
           if (response.data.status === true) {
             alert(response.data.message)
@@ -63,8 +59,8 @@ const ProductList = () => {
     let key = e.target.value;
     if (key) {
       axios({
-        method:'get',
-        url:`http://localhost:2345/search/${key}`,
+        method: 'get',
+        url: `http://localhost:2345/search/${key}`,
 
       }).then((response) => {
         if (response.data.status === true) {
@@ -96,32 +92,33 @@ const ProductList = () => {
           </tr>
         </thead>
         <tbody>
-            
-              {product.map((item,index) => {
-                return (
-          <tr key={index}>
-            <td>{item.name}</td>
-            <td>{item.price}</td>
-            <td>{item.category}</td>
-            <td>{item.userId}</td>
-            <td>{item.company}</td>
-            <td>
-              <button
-                className="deletebtn"
-                onClick={() => deleteproduct(item._id)}
-              >
-                Delete
-              </button>
-              <button
-                className="updatebtn"
-                onClick={() => Updateproduct(item._id)}
-              >
-                update
-              </button>
-            </td>
-          </tr>
-          )})
-              }
+
+          {product.map((item, index) => {
+            return (
+              <tr key={index}>
+                <td>{item.name}</td>
+                <td>{item.price}</td>
+                <td>{item.category}</td>
+                <td>{item.userId}</td>
+                <td>{item.company}</td>
+                <td>
+                  <button
+                    className="deletebtn"
+                    onClick={() => deleteproduct(item._id)}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="updatebtn"
+                    onClick={() => Updateproduct(item._id)}
+                  >
+                    update
+                  </button>
+                </td>
+              </tr>
+            )
+          })
+          }
 
         </tbody>
       </table>) : (
