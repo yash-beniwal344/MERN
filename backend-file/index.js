@@ -24,19 +24,7 @@ app.post("/signup", async (req, resp) => {
         }
      })
      
-  
-  // app.post("/login", async (req, resp) => {
-  //   if (req.body.password && req.body.email) {
-  //     let user = await users.findOne(req.body).select("-password");
-  //     if (user) {
-  //       resp.send({ status: true, message: "login parfectly", data: user });
-  //     } else {
-  //       resp.send({ status: false, message: "user not found" });
-  //     }
-  //   } else {
-  //     resp.send({ status: false, message: "enter all details" });
-  //   }
-  // });
+
   app.post("/login", async (req, resp) => {
     if (req.body.password && req.body.email) {
       let user = await users.findOne(req.body).select("-password");
