@@ -24,7 +24,7 @@ const verifytoken = (req,resp,next)=>{
         resp.send({status:false,message:'enter valid token' });
       
       }
-    })
+    });
   }
   else{
     resp.send({status:false,message:'enter token '});
