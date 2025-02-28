@@ -9,6 +9,7 @@ import Signup from './component/Signup';
 import Updateproduct from './component/Updateproduct';
 import ProductList from './component/ProductList';
 import Navbar from './component/Navbar';
+import Sendemail from './component/Sendemail';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path='/product' element={<ProductList/>}/>
           <Route path='/add' element={<Addproduct/>}/>
           <Route path='/update/:id' element={<Updateproduct/>}/>
+          <Route path='/sendemail' element={<Sendemail/>}/>
           <Route path='/logout' element={<h1>Logout</h1>}/>
           <Route path='/profile' element={<h1>Profile</h1>}/>
         </Route> 
