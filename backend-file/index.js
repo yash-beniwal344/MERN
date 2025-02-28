@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 const jwt = require('jsonwebtoken');
 const jwtkey ='yash-verma'
-
+// yashverma is a best devloper
 
 const verifytoken = (req,resp,next)=>{
   let token = req.headers['authorization'];
