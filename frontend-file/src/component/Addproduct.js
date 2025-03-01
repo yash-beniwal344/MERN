@@ -8,6 +8,7 @@ const Addproduct = () => {
     const [category, setcategory] = useState('')
 
     const [company, setcompany] = useState('')
+    const [image, setimage] = useState('')
 
     const navigate = useNavigate();
     const namechange = (e) => {
@@ -23,6 +24,9 @@ const Addproduct = () => {
     const companychange = (e) => {
         setcompany(e.target.value)
     }
+    const imagechange = (e) => {
+        setimage(e.target.value)
+    }
 
     const buttonclick = () => {
         const userId = JSON.parse(localStorage.getItem('user'))._id;
@@ -34,7 +38,8 @@ const Addproduct = () => {
                 price: price,
                 category: category,
                 userId: userId,
-                company: company 
+                company: company ,
+                image:image
             },
             headers:{
             authorization:`bearer ${localStorage.getItem('token')}`
@@ -58,12 +63,13 @@ const Addproduct = () => {
     }
     return (
         <div className='addproduct'>
+            
             <h2>Add Product</h2>
             <input type="text" className="inputbox" placeholder="enter product name" onChange={namechange} value={name} />
             <input type="text" className="inputbox" placeholder="enter price" onChange={pricechange} value={price} />
             <input type="text" className="inputbox" placeholder="enter category" onChange={categorychange} value={category} />
-
             <input type="text" className="inputbox" placeholder="enter company" onChange={companychange} value={company} />
+            <input type="file" className="inputboxx"  onChange={imagechange} value={image} />
 
             <button className="btn" onClick={buttonclick}>Add Product</button>
         </div>
@@ -71,3 +77,4 @@ const Addproduct = () => {
 }
 
 export default Addproduct
+

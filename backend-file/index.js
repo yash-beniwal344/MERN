@@ -9,6 +9,18 @@ app.use(express.json());
 const jwt = require('jsonwebtoken');
 const jwtkey ='yash-verma'
 // yashverma is a best devloper
+const multer = require('multer');
+
+const uplode =multer({
+  storage:multer.diskStorage({
+    destination:function(req,file,cb){
+      cb(null,'file');
+    },
+    filename:function(req,file,cb){
+      cb(null,file.filename+'-'+Date.now()+'.jpg');
+    }
+  })
+}).single('productpic')
 
 const verifytoken = (req,resp,next)=>{
   let token = req.headers['authorization'];
@@ -86,18 +98,19 @@ app.post("/signup", async (req, resp) => {
     }
   });
   
-  app.post("/addproduct",verifytoken, async (req, resp) => {
+  app.post("/addproduct",uplode,verifytoken, async (req, resp) => {
     if (
       req.body.name == "" ||
       req.body.price == "" ||
       req.body.category == "" ||
-      req.body.company == ""
+      req.body.company == "" ||
+      req.body.image == ""
     ) {
       resp.send({ status: false, message: "all field are require" });
     } else {
       let product = new productschema(req.body);
       let result = await product.save();
-        console.log(req.body)
+        console.log(req.file);
       resp.send({ status: true, message: "data inserted", data: result });
     }
   });
@@ -167,6 +180,10 @@ app.post("/signup", async (req, resp) => {
     
    });
 
+   app.post('/uplodefile',uplode,(req,resp)=>{
+    resp.send('file uplode',req.body.productpic);
+
+  })
 
 
    app.listen(2345);
