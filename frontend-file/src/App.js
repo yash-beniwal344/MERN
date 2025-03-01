@@ -2,7 +2,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Addproduct from './component/Addproduct';
-import Footer from './component/Footer';
+
 import Login from './component/Login';
 import Private from './component/Private';
 import Signup from './component/Signup';
@@ -30,7 +30,7 @@ function App() {
       </Routes>
          
      </BrowserRouter>
-     <Footer/>
+     
     </div>
   );
 }

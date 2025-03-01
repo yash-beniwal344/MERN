@@ -101,7 +101,8 @@ const ProductList = () => {
               {product.map((item,index) => {
                 return (
           <tr key={index}>
-            <td><img src={"https://fakestoreapi.com/img/51Y5NI-I5jL._AC_UX679_.jpg"} alt='img' style={{width:'50px'}}/> </td>
+            <td><img src={`http://localhost:2345/${item.image}`} alt='img' style={{width:'50px'}}/> </td>
+            {/* <td>{item.image}</td> */}
             <td>{item.name}</td>
             <td>{item.price}</td>
             <td>{item.category}</td>

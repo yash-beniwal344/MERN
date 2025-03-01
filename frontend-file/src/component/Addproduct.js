@@ -25,22 +25,25 @@ const Addproduct = () => {
         setcompany(e.target.value)
     }
     const imagechange = (e) => {
-        setimage(e.target.value)
+        setimage(e.target.files[0])
     }
 
     const buttonclick = () => {
         const userId = JSON.parse(localStorage.getItem('user'))._id;
+        var formData = new FormData()
+        formData.append('name',name);
+        formData.append('price',price);
+        formData.append('category',category);
+        formData.append('userId',userId);
+        formData.append('company',company);
+        formData.append('image',image);
+
+    
+
         axios({
             method:'post',
             url:'http://localhost:2345/addproduct',
-            data:{
-                name: name,
-                price: price,
-                category: category,
-                userId: userId,
-                company: company ,
-                image:image
-            },
+          data: formData,
             headers:{
             authorization:`bearer ${localStorage.getItem('token')}`
         }
@@ -55,7 +58,7 @@ const Addproduct = () => {
                 console.log(response.data);
                 navigate('/product')
             }
-
+            
         }).catch((error) => {
             alert('error');
             console.log(error)
@@ -63,13 +66,12 @@ const Addproduct = () => {
     }
     return (
         <div className='addproduct'>
-            
             <h2>Add Product</h2>
-            <input type="text" className="inputbox" placeholder="enter product name" onChange={namechange} value={name} />
-            <input type="text" className="inputbox" placeholder="enter price" onChange={pricechange} value={price} />
-            <input type="text" className="inputbox" placeholder="enter category" onChange={categorychange} value={category} />
-            <input type="text" className="inputbox" placeholder="enter company" onChange={companychange} value={company} />
-            <input type="file" className="inputboxx"  onChange={imagechange} value={image} />
+            <input type="text" className="inputbox" placeholder="enter product name" onChange={namechange}/>
+            <input type="text" className="inputbox" placeholder="enter price" onChange={pricechange} />
+            <input type="text" className="inputbox" placeholder="enter category" onChange={categorychange}  />
+            <input type="text" className="inputbox" placeholder="enter company" onChange={companychange} />
+            <input type="file" className="inputboxx"  onChange={imagechange}  />
 
             <button className="btn" onClick={buttonclick}>Add Product</button>
         </div>
@@ -78,3 +80,4 @@ const Addproduct = () => {
 
 export default Addproduct
 
+                
