@@ -87,7 +87,6 @@ const ProductList = () => {
       {product.length > 0 ? (<table>
         <thead>
           <tr>
-            <th>image</th>
             <th> product name</th>
             <th>product price</th>
             <th>product category</th>
@@ -101,8 +100,6 @@ const ProductList = () => {
               {product.map((item,index) => {
                 return (
           <tr key={index}>
-            <td><img src={`http://localhost:2345/${item.image}`} alt='img' style={{width:'50px'}}/> </td>
-          
             <td>{item.name}</td>
             <td>{item.price}</td>
             <td>{item.category}</td>
@@ -135,4 +132,3 @@ const ProductList = () => {
 }
 
 export default ProductList
-  
