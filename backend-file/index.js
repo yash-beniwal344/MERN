@@ -3,15 +3,16 @@ const app = express();
 require('./db/config');
 const users = require('./db/UserSchema');
 const productschema = require('./db/productschema');
-
+const fs = require('fs');
 const cors = require('cors');;
 app.use(cors());
 app.use(express.json());
 const jwt = require('jsonwebtoken');
-const jwtkey = 'yash-verma'
+const jwtkey = 'yash-verma';
+const path = require('path');
 
 const multer = require('multer');
-app.use(express.static(__dirname+'/file'))
+app.use(express.static(__dirname+'/file'));
 
 const uplode = multer({
   storage: multer.diskStorage({
@@ -67,18 +68,7 @@ app.post("/signup", async (req, resp) => {
 
   }
 });
-// app.post("/login", async (req, resp) => {
-//   if (req.body.password && req.body.email) {
-//     let user = await users.findOne(req.body).select("-password");
-//     if (user) {
-//       resp.send({ status: true, message: "login parfectly", data: user });
-//     } else {
-//       resp.send({ status: false, message: "user not found" });
-//     }
-//   } else {
-//     resp.send({ status: false, message: "enter all details" });
-//   }
-// });
+
 app.post("/login", async (req, resp) => {
   if (req.body.password && req.body.email) {
     let user = await users.findOne(req.body).select("-password");
@@ -107,7 +97,7 @@ app.post("/addproduct", uplode, verifytoken, async (req, resp) => {
     req.body.category == "" ||
     req.body.company == "" ||
     req.body.userId == "" ||
-    req.body.image == ""
+    req.file == null
   ) {
     resp.send({ status: false, message: "all field are require" });
   } else {
@@ -154,6 +144,7 @@ app.get('/product/:id', async (req, resp) => {
   if (product) {
 
     resp.send({ status: true, message: 'data found', data: product });
+   
   }
   else {
     resp.send({ status: false, message: "data not found" });
@@ -161,15 +152,55 @@ app.get('/product/:id', async (req, resp) => {
 });
 
 
-app.put('/update/:id', verifytoken, async (req, resp) => {
-  let result = await productschema.updateOne({ _id: req.params.id }, { $set: req.body });
-  if (result) {
-    resp.send({ status: true, message: 'product updated', data: result });
-    console.log(req.body)
+app.put('/update/:id',uplode, verifytoken, async (req, resp) => {
+
+  let name = req.body.name;
+  let price = req.body.price;
+  let category = req.body.category;
+  let company = req.body.company;
+ 
+
+  if(!name || !price || !category || !company ){
+    resp.send({status:false,message:'all fields require'});
   }
-  else {
-    resp.send({ status: false, message: 'error' })
+  else{
+    if(req.file==null){
+      let product = await productschema.findOne({ _id: req.params.id });
+      var oldimage = product.image;
+      var image = oldimage
+      let result = await productschema.updateOne({ _id: req.params.id }, { name,price,category,company,image});
+      if (result) {
+        resp.send({ status: true, message: 'product updated', data: result });
+       
+      }
+      else {
+        resp.send({ status: false, message: 'error' });
+       
+      }
+    }
+    else{
+      let product = await productschema.findOne({ _id: req.params.id });
+      var oldimage = product.image;
+     const oldpath = path.join(__dirname,'/file/'+oldimage);
+     fs.unlink(oldpath,(error)=>{
+      if(error){
+        console.log(error)
+      }
+     });
+      var image = req.file.filename
+      let result = await productschema.updateOne({ _id: req.params.id }, { name,price,category,company,image});
+     
+      if (result) {
+        resp.send({ status: true, message: 'product updated', data: result });
+       
+      }
+      else {
+        resp.send({ status: false, message: 'error' });
+       
+      }
+    }
   }
+ 
 });
 
 
@@ -202,3 +233,4 @@ app.post('/uplodephoto', uplode, async (req, resp) => {
 
 
 app.listen(2345);
+ 

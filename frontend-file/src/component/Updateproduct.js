@@ -7,6 +7,7 @@ const Updateproduct = () => {
   const [price, setprice] = useState("");
   const [category, setcategory] = useState("");
   const [company, setcompany] = useState("");
+  const [image, setimage] = useState("");
   const param = useParams();
   const navigate = useNavigate();
 
@@ -16,17 +17,19 @@ const Updateproduct = () => {
   useEffect(() => {
     const getproductdetails = () => {
       axios({
-        method:'get',
-        url:`http://localhost:2345/product/${param.id}`,
-     
+        method: 'get',   
+        url: `http://localhost:2345/product/${param.id}`,
+
       })
-       
+     
         .then((response) => {
           if (response.data.status === true) {
             setname(response.data.data.name);
             setprice(response.data.data.price);
             setcategory(response.data.data.category);
             setcompany(response.data.data.company);
+
+            console.log(response.data.data.company)
           } else {
             alert(response.data.message);
             navigate("/product");
@@ -41,27 +44,31 @@ const Updateproduct = () => {
   }, [param.id, navigate]);
 
   const buttonclick = () => {
-    console.log(name, price, category, company);
+    var formData = new FormData()
+    formData.append('name', name);
+    formData.append('price', price);
+    formData.append('category', category);
+
+    formData.append('company', company);
+    formData.append('image', image);
     axios
       ({
-        method:'put',
-        url:`http://localhost:2345/update/${param.id}`,
-        data: {
-          name: name,
-          price: price,
-          category: category,
-          company: company
-        },
+        method: 'put',
+        url: `http://localhost:2345/update/${param.id}`,
+        data:
+          formData
+        ,
         headers: {
           authorization: `bearer ${localStorage.getItem('token')}`
         }
-      
-       
+
+
       })
       .then((response) => {
         if (response.data.status === true) {
           alert(response.data.message);
           navigate("/product");
+          // console.log(formData)
         } else {
           alert(response.data.message);
         }
@@ -108,6 +115,15 @@ const Updateproduct = () => {
         }}
         value={company}
       />
+      <input
+        type="file"
+        className="inputboxx"
+
+        onChange={(e) => {
+          setimage(e.target.files[0]);
+        }}
+
+      />
 
       <button className="btn" onClick={buttonclick}>
         Update Product
@@ -117,5 +133,4 @@ const Updateproduct = () => {
 }
 
 export default Updateproduct
-
 
