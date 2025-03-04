@@ -119,11 +119,13 @@ app.post("/addproduct", uplode, verifytoken, async (req, resp) => {
 
 app.get('/products', verifytoken, async (req, resp) => {
   const item = await productschema.find();
+  
   if (item.length == 0) {
     resp.send({ status: false, message: 'not found aney product' })
   }
   else {
-    resp.send({ status: true, message: 'product found', data: item })
+    resp.send({ status: true, message: 'product found', data: item });
+  
   }
 });
 
@@ -180,9 +182,9 @@ app.put('/update/:id',uplode, verifytoken, async (req, resp) => {
       }
     }
     else{
-      let product = await productschema.findOne({ _id: req.params.id });
-      var oldimage = product.image;
-     const oldpath = path.join(__dirname,'/file/'+oldimage);
+      // let product = await productschema.findOne({ _id: req.params.id });
+      // var oldimage = product.image;
+     const oldpath = path.join(__dirname,'./file/'+oldimage);
      fs.unlink(oldpath,(error)=>{
       if(error){
         console.log(error)
