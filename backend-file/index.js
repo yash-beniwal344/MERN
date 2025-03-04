@@ -164,9 +164,10 @@ app.put('/update/:id',uplode, verifytoken, async (req, resp) => {
     resp.send({status:false,message:'all fields require'});
   }
   else{
-    if(req.file==null){
-      let product = await productschema.findOne({ _id: req.params.id });
+     let product = await productschema.findOne({ _id: req.params.id });
       var oldimage = product.image;
+    if(req.file==null){
+     
       var image = oldimage
       let result = await productschema.updateOne({ _id: req.params.id }, { name,price,category,company,image});
       if (result) {
