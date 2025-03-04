@@ -42,7 +42,7 @@ const Addproduct = () => {
 
         axios({
             method:'post',
-            url:`http://localhost:2345/addproduct`,
+            url:`http://localhost:2345/${process.env.REACT_APP_add_api}`,
           data: formData,
             headers:{
             authorization:`bearer ${localStorage.getItem('token')}`
