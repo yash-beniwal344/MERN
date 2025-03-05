@@ -8,6 +8,7 @@ const Addproduct = () => {
     const [category, setcategory] = useState('')
 
     const [company, setcompany] = useState('')
+    const [image, setimage] = useState('')
 
     const navigate = useNavigate();
     const namechange = (e) => {
@@ -23,19 +24,34 @@ const Addproduct = () => {
     const companychange = (e) => {
         setcompany(e.target.value)
     }
+    const imagechange = (e) => {
+        setimage(e.target.files);
+
+    }
+   
 
     const buttonclick = () => {
+        console.log(image)
         const userId = JSON.parse(localStorage.getItem('user'))._id;
+        var formData = new FormData()
+        formData.append('name',name);
+        formData.append('price',price);
+        formData.append('category',category);
+        formData.append('userId',userId);
+        formData.append('company',company);
+
+        for (let index = 0; index < image.length; index++) {
+            const element = image[index];
+            formData.append('image',element);
+        }
+        
+
+    
+
         axios({
             method:'post',
-            url:'http://localhost:2345/addproduct',
-            data:{
-                name: name,
-                price: price,
-                category: category,
-                userId: userId,
-                company: company 
-            },
+            url:`http://localhost:2345/${process.env.REACT_APP_add_api}`,
+          data: formData,
             headers:{
             authorization:`bearer ${localStorage.getItem('token')}`
         }
@@ -50,7 +66,7 @@ const Addproduct = () => {
                 console.log(response.data);
                 navigate('/product')
             }
-
+            
         }).catch((error) => {
             alert('error');
             console.log(error)
@@ -59,11 +75,11 @@ const Addproduct = () => {
     return (
         <div className='addproduct'>
             <h2>Add Product</h2>
-            <input type="text" className="inputbox" placeholder="enter product name" onChange={namechange} value={name} />
-            <input type="text" className="inputbox" placeholder="enter price" onChange={pricechange} value={price} />
-            <input type="text" className="inputbox" placeholder="enter category" onChange={categorychange} value={category} />
-
-            <input type="text" className="inputbox" placeholder="enter company" onChange={companychange} value={company} />
+            <input type="text" className="inputbox" placeholder="enter product name" onChange={namechange}/>
+            <input type="text" className="inputbox" placeholder="enter price" onChange={pricechange} />
+            <input type="text" className="inputbox" placeholder="enter category" onChange={categorychange}  />
+            <input type="text" className="inputbox" placeholder="enter company" onChange={companychange} />
+            <input type="file" className="inputboxx"  onChange={imagechange} multiple />
 
             <button className="btn" onClick={buttonclick}>Add Product</button>
         </div>
@@ -71,3 +87,5 @@ const Addproduct = () => {
 }
 
 export default Addproduct
+
+                
