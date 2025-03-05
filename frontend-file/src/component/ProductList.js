@@ -101,11 +101,7 @@ const ProductList = () => {
               {product.map((item,index) => {
                 return (
           <tr key={index}>
-<<<<<<< HEAD
-                    <td><img src={`http://localhost:2345/${item.image}`} alt='img' style={{width:'50px'}}/> </td>
-=======
-            <td><img src={`http://localhost:2345/${item.image}`} alt='img' style={{width:'50px'}}/> </td>
->>>>>>> 080d4040c6aaabcacb25847e70c894a074c6caeb
+                    <td><img src={`http://localhost:2345/${item.image[0]}`} alt='img' style={{width:'50px'}}/> </td>
             <td>{item.name}</td>
             <td>{item.price}</td>
             <td>{item.category}</td>

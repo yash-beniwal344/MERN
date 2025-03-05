@@ -29,7 +29,7 @@ const Updateproduct = () => {
             setcategory(response.data.data.category);
             setcompany(response.data.data.company);
 
-            console.log(response.data.data.company)
+          
           } else {
             alert(response.data.message);
             navigate("/product");
@@ -50,7 +50,12 @@ const Updateproduct = () => {
     formData.append('category', category);
 
     formData.append('company', company);
-    formData.append('image', image);
+for (let index = 0; index < image.length; index++) {
+  const element = image[index];
+  formData.append('image', element);
+}
+
+    
     axios
       ({
         method: 'put',
@@ -118,9 +123,9 @@ const Updateproduct = () => {
       <input
         type="file"
         className="inputboxx"
-
+           multiple
         onChange={(e) => {
-          setimage(e.target.files[0]);
+          setimage(e.target.files);
         }}
 
       />

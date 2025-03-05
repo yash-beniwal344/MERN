@@ -25,10 +25,13 @@ const Addproduct = () => {
         setcompany(e.target.value)
     }
     const imagechange = (e) => {
-        setimage(e.target.files[0])
+        setimage(e.target.files);
+
     }
+   
 
     const buttonclick = () => {
+        console.log(image)
         const userId = JSON.parse(localStorage.getItem('user'))._id;
         var formData = new FormData()
         formData.append('name',name);
@@ -36,7 +39,12 @@ const Addproduct = () => {
         formData.append('category',category);
         formData.append('userId',userId);
         formData.append('company',company);
-        formData.append('image',image);
+
+        for (let index = 0; index < image.length; index++) {
+            const element = image[index];
+            formData.append('image',element);
+        }
+        
 
     
 
@@ -71,7 +79,7 @@ const Addproduct = () => {
             <input type="text" className="inputbox" placeholder="enter price" onChange={pricechange} />
             <input type="text" className="inputbox" placeholder="enter category" onChange={categorychange}  />
             <input type="text" className="inputbox" placeholder="enter company" onChange={companychange} />
-            <input type="file" className="inputboxx"  onChange={imagechange}  />
+            <input type="file" className="inputboxx"  onChange={imagechange} multiple />
 
             <button className="btn" onClick={buttonclick}>Add Product</button>
         </div>

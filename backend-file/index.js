@@ -14,7 +14,7 @@ const path = require('path');
 const multer = require('multer');
 app.use(express.static(__dirname+'/file'));
 
-const uplode = multer({
+const upload = multer({
   storage: multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'file');
@@ -23,7 +23,7 @@ const uplode = multer({
       cb(null, file.filename + '-' + Date.now() + '.jpg');
     }
   })
-}).single('image')
+}).array('image',5)
 
 const verifytoken = (req, resp, next) => {
   let token = req.headers['authorization'];
@@ -90,19 +90,19 @@ app.post("/login", async (req, resp) => {
   }
 });
 
-app.post("/addproduct", uplode, verifytoken, async (req, resp) => {
+app.post("/addproduct", upload, verifytoken, async (req, resp) => {
   if (
-    req.body.name == "" ||
-    req.body.price == "" ||
-    req.body.category == "" ||
-    req.body.company == "" ||
-    req.body.userId == "" ||
-    req.file == null
+    !req.body.price  ||
+    !req.body.category  ||
+    !req.body.company  ||
+    !req.body.userId  ||
+    !req.files || req.files.length === 0
   ) {
     resp.send({ status: false, message: "all field are require" });
+  
   } else {
-   
-    let image = req.file.filename;
+  
+    let image = req.files.map((item)=>item.filename);
    let name = req.body.name;
    let price = req.body.price;
    let category = req.body.category;
@@ -111,7 +111,7 @@ app.post("/addproduct", uplode, verifytoken, async (req, resp) => {
     let product = new productschema({name,price,category,company,userId,image});
     let result = await product.save();
     console.log(req.body.name);
-    console.log(req.file);
+    console.log(image);
  
     resp.send({ status: true, message: "data inserted", data: result });
   }
@@ -154,7 +154,7 @@ app.get('/product/:id', async (req, resp) => {
 });
 
 
-app.put('/update/:id',uplode, verifytoken, async (req, resp) => {
+app.put('/update/:id',upload, verifytoken, async (req, resp) => {
 
   let name = req.body.name;
   let price = req.body.price;
@@ -168,7 +168,7 @@ app.put('/update/:id',uplode, verifytoken, async (req, resp) => {
   else{
      let product = await productschema.findOne({ _id: req.params.id });
       var oldimage = product.image;
-    if(req.file==null){
+    if(!req.files || req.files.length===0){
      
       var image = oldimage
       let result = await productschema.updateOne({ _id: req.params.id }, { name,price,category,company,image});
@@ -182,15 +182,14 @@ app.put('/update/:id',uplode, verifytoken, async (req, resp) => {
       }
     }
     else{
-      // let product = await productschema.findOne({ _id: req.params.id });
-      // var oldimage = product.image;
+     
      const oldpath = path.join(__dirname,'./file/'+oldimage);
      fs.unlink(oldpath,(error)=>{
       if(error){
         console.log(error)
       }
      });
-      var image = req.file.filename
+      var image = req.files.map((item)=>item.filename);
       let result = await productschema.updateOne({ _id: req.params.id }, { name,price,category,company,image});
      
       if (result) {
@@ -226,7 +225,7 @@ app.get('/search/:key', async (req, resp) => {
 
 });
 
-app.post('/uplodephoto', uplode, async (req, resp) => {
+app.post('/uplodephoto', upload, async (req, resp) => {
 
 
   resp.send({ mess: 'file uplode' });
