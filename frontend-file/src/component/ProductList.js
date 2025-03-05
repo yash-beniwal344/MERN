@@ -103,7 +103,7 @@ const ProductList = () => {
           <tr key={index}>
 
             
-                    <td><img src={`http://localhost:2345/${item.image[0]}`} alt='img' style={{width:'50px'}}/> </td>
+            <td><img src={`http://localhost:2345/${item.image[0]}`} alt='img' style={{width:'50px'}}/> </td>
 
             <td>{item.name}</td>
             <td>{item.price}</td>
