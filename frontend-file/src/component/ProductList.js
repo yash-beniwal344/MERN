@@ -100,6 +100,7 @@ const ProductList = () => {
               {product.map((item,index) => {
                 return (
           <tr key={index}>
+            
             <td>{item.name}</td>
             <td>{item.price}</td>
             <td>{item.category}</td>
