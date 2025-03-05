@@ -13,7 +13,7 @@ const ProductList = () => {
   const getproduct = () => {
     axios({
       method:'get',
-      url:'http://localhost:2345/products',
+      url:`http://localhost:2345/${process.env.REACT_APP_products_api}`,
       headers:{
         authorization:`bearer ${localStorage.getItem('token')}`
       }
@@ -87,6 +87,7 @@ const ProductList = () => {
       {product.length > 0 ? (<table>
         <thead>
           <tr>
+          <th>image</th>
             <th> product name</th>
             <th>product price</th>
             <th>product category</th>
@@ -100,7 +101,10 @@ const ProductList = () => {
               {product.map((item,index) => {
                 return (
           <tr key={index}>
+
             
+                    <td><img src={`http://localhost:2345/${item.image[0]}`} alt='img' style={{width:'50px'}}/> </td>
+
             <td>{item.name}</td>
             <td>{item.price}</td>
             <td>{item.category}</td>
