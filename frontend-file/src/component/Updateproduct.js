@@ -68,7 +68,7 @@ const Updateproduct = () => {
         if (response.data.status === true) {
           alert(response.data.message);
           navigate("/product");
-          // console.log(formData)
+         
         } else {
           alert(response.data.message);
         }

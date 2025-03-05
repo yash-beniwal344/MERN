@@ -31,7 +31,7 @@ const Signup = () => {
    
         axios({
             method:'post',
-            url:'http://localhost:2345/signup',
+            url:`http://localhost:2345/${process.env.REACT_APP_signup_api}`,
             data:{
                 name:name,
                 email:email,
