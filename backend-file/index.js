@@ -10,6 +10,7 @@ app.use(express.json());
 const jwt = require('jsonwebtoken');
 const jwtkey = 'yash-verma';
 const path = require('path');
+const nodemailer = require('nodemailer')
 
 const multer = require('multer');
 app.use(express.static(__dirname+'/file'));
@@ -20,7 +21,7 @@ const upload = multer({
       cb(null, 'file');
     },
     filename: function (req, file, cb) {
-      cb(null, file.filename + '-' + Date.now() + '.jpg');
+      cb(null, file.originalname + '-' + Date.now() + '.jpg');
     }
   })
 }).array('image',5)
@@ -182,13 +183,17 @@ app.put('/update/:id',upload, verifytoken, async (req, resp) => {
       }
     }
     else{
-     
-     const oldpath = path.join(__dirname,'./file/'+oldimage);
-     fs.unlink(oldpath,(error)=>{
-      if(error){
-        console.log(error)
-      }
-     });
+      for (let index = 0; index < oldimage.length; index++) {
+        const element = oldimage[index];
+        const oldpath = path.join(__dirname,'./file/'+element);
+        fs.unlink(oldpath,(error)=>{
+         if(error){
+           console.log(error)
+         }
+        });
+    }
+    
+    
       var image = req.files.map((item)=>item.filename);
       let result = await productschema.updateOne({ _id: req.params.id }, { name,price,category,company,image});
      
@@ -225,13 +230,36 @@ app.get('/search/:key', async (req, resp) => {
 
 });
 
-app.post('/uplodephoto', upload, async (req, resp) => {
-
-
-  resp.send({ mess: 'file uplode' });
-
-
-});
+app.post('/email',async(req,resp)=>{
+  if(!req.body.email || !req.body.subject || !req.body.text){
+    resp.send({status:false,message:'all fields are require'});
+  }
+  else{
+    let details = {
+      from: 'yashkaran.344@gmail.com',
+      to: req.body.email,
+      subject: req.body.subject,
+      text: req.body.text
+    };
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      port: 465,
+      secure: true,
+      auth: {
+        user: 'yashkaran.344@gmail.com',
+        pass: 'fzovuijoolwxgbsq'
+}
+ });
+ const info = await transporter.sendMail(details, (error, response) => {
+  if (error) {
+    resp.send({ status: false, message: 'some error found! ' })
+  }
+  else{
+    resp.send({status:true,message:'mail sending complete',data:info})
+  }
+ })
+}
+})
 
 
 app.listen(2345);

@@ -9,6 +9,7 @@ import Signup from './component/Signup';
 import Updateproduct from './component/Updateproduct';
 import ProductList from './component/ProductList';
 import Navbar from './component/Navbar';
+import Email from './component/Email';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
          <Route element={<Private/>}>
           <Route path='/product' element={<ProductList/>}/>
           <Route path='/add' element={<Addproduct/>}/>
+          <Route path='/email' element={<Email/>}/>
           <Route path='/update/:id' element={<Updateproduct/>}/>
           <Route path='/logout' element={<h1>Logout</h1>}/>
           <Route path='/profile' element={<h1>Profile</h1>}/>

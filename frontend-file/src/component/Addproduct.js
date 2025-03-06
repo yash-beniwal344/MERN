@@ -82,6 +82,7 @@ const Addproduct = () => {
             <input type="file" className="inputboxx"  onChange={imagechange} multiple />
 
             <button className="btn" onClick={buttonclick}>Add Product</button>
+            
         </div>
     )
 }

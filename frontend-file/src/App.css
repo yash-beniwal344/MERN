@@ -258,3 +258,38 @@
    color: rgb(47, 144, 183);
    font-size: 17px;
  }
+
+ .email{
+  margin-left: 30%;
+}
+.email h2{
+  color: rgb(47, 144, 183);
+}
+.email .inputbox{
+  display: block;
+  padding: 6px;
+  margin: 10px;
+  width: 300px;
+  border: 1px solid rgb(47, 144, 183);
+  color: rgb(47, 144, 183);
+}
+.inputbox::placeholder{
+  color: rgb(47, 144, 183);
+  font-size: 17px;
+}
+.email .btn{
+  margin: 10px;
+  width: 100px;
+  padding: 5px;
+  background-color: rgb(47, 144, 183);
+  color: white;
+  border: none;
+  font-size: 17px;
+cursor: pointer;
+}
+.email .btn:hover{
+ 
+  background-color: rgb(1, 161, 225);
+ 
+
+}
